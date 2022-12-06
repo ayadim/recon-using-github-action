@@ -1,0 +1,42 @@
+name: subdomain-enum
+
+on:
+    workflow_dispatch:
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Amass - Enumeration
+        uses: fguisso/amass-action@main
+        with:
+          domains: hespress.com
+          brute: true
+          output: amass-result.txt
+
+      - name: SubFinder - DNS Enumeration
+        uses: projectdiscovery/subfinder-action@main
+        with:
+          domain: hespress.com
+          config: config/subfinder-config.yaml
+          output: subfinder-result.txt 
+
+      - name: FFUF - subdomain fuzzer
+        uses: ayadim/ffuf-action@main
+        with:
+          config: config/ffuf-vhost.ini
+          wordlist: wordlist/subdomains/assetnote-subdomains.txt
+
+      - name: GitHub Workflow artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: |
+            amass-result.txt
+            subfinder-result.txt
+            ffuf-subdomain-result.md

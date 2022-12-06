@@ -1,0 +1,25 @@
+name: ffuf-web
+#https://github.com/ayadim/ffuf-action
+on:
+    workflow_dispatch:
+
+jobs:
+  ffuf-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
+
+      - name: FFUF - Web fuzzer
+        uses: ayadim/ffuf-action@main
+        with:
+          config: config/ffuf.ini
+          wordlist: wordlist/directories/easywin/fuzz.txt
+
+      - name: GitHub Workflow artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ffuf-result
+          path: ffuf-result.md

@@ -1,0 +1,19 @@
+name: nuclei
+#more examples : https://github.com/projectdiscovery/nuclei-action
+on:
+    workflow_dispatch:
+
+jobs:
+  nuclei-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
+
+      - name: 💥 nuclei - scanner
+        uses: projectdiscovery/nuclei-action@main
+        with:
+          user-agent: "User-Agent:'Nuclei - DAST Scan (Have a nice day)'"
+          urls: input-data/nuclei-urls.txt

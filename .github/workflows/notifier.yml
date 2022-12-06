@@ -1,0 +1,37 @@
+#https://www.youtube.com/watch?v=b_LaFl47Xnw
+name: telegram message
+on: 
+  workflow_run:
+    workflows: [Amass-brute,Amass-passive,Naabu,subfinder,ffuf-subdomain,gau,ffuf-web,subdomain-enum,nuclei]
+    types:
+      - completed
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: send telegram message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            User : ${{ github.actor }}.
+            Repository: ${{ github.repository }}.            
+            Workflow name : ${{ github.event.workflow_run.name }}.
+            Workflow path : ${{ github.event.workflow_run.path }}.
+            Created at: ${{ github.event.workflow_run.created_at }}.
+            Status: ${{ github.event.workflow_run.status }}.
+            Conclusion: Task is done with ${{ github.event.workflow_run.conclusion }}.         
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: send telegram message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.actor }} Run a workflow [ ${{ github.workflow }} ] that get not passed.
+            Repository: ${{ github.repository }}.

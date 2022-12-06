@@ -1,0 +1,20 @@
+binaryedge:
+  - ""
+censys:
+  - ""
+certspotter: 
+  - ""
+passivetotal:
+  - ""
+securitytrails: 
+  - ""
+shodan:
+  - ""
+github:
+  - ""
+spyse:
+    - ""
+virustotal:
+    - ""
+zoomeye:
+    - ""   

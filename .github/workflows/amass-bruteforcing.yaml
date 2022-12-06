@@ -1,0 +1,24 @@
+name: Amass-brute
+#https://github.com/ayadim/amass-action
+on:
+    workflow_dispatch:
+
+jobs:
+  amass-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
+
+      - name: 💥 amass - Assets Enum
+        uses: ayadim/amass-action@main
+        with:
+          config: config/amass-brute-config.ini
+
+      - name: GitHub Workflow artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: amass-result
+          path: amass-result.txt

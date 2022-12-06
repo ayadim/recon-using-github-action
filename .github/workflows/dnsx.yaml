@@ -1,0 +1,25 @@
+name: 💥 dnsx - DNS Resolver
+#https://github.com/projectdiscovery/dnsx-action
+on:
+    workflow_dispatch:
+
+jobs:
+  dnsx-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
+
+      - name: 💥 dnsx - DNS Resolver
+        uses: projectdiscovery/dnsx-action@main
+        with:
+          list: input-data/dnsx-hosts.txt
+          resolver: config/resolvers.txt
+
+      - name: GitHub Workflow artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dnsx.log
+          path: dnsx.log

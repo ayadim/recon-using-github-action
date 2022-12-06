@@ -1,0 +1,24 @@
+name: 💥 httpx - HTTP Web Server probing
+#https://github.com/projectdiscovery/httpx-action
+on:
+    workflow_dispatch:
+
+jobs:
+  httpx-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
+
+      - name: 💥 httpx - HTTP Web Server probing
+        uses: projectdiscovery/httpx-action@main
+        with:
+          list: input-data/httpx-hosts.txt
+
+      - name: GitHub Workflow artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: httpx.log
+          path: httpx.log
